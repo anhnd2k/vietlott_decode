@@ -19,8 +19,7 @@ class ValidateTicketInfo extends Component<Props> {
     if (this.encodedData.length > 0) {
       if (this.encodedData[0] === 49 && this.encodedData.length === 17) {
         // to do
-        const idataStream2 = new IDataStream2({});
-        let t: number[] = idataStream2.asciiHex(
+        let t: number[] = IDataStream2.asciiHex(
           this.encodedData.toString().substring(1, 17),
         );
         const bcDatax: number[] = [];

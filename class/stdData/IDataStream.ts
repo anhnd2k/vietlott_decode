@@ -3,9 +3,11 @@ import ILanguage from './ILanguage';
 interface Props {}
 
 class IDataStream extends Component<Props> {
+  static local: IDataStream;
   constructor(props: Props) {
     super(props);
     this.state = {};
+    IDataStream.local = this;
   }
 
   hex2Ascii(d: number) {
@@ -39,13 +41,17 @@ class IDataStream extends Component<Props> {
     return this.padString(t, 2, '0', false);
   }
 
-  toHexString(b: number[]): string {
+  static toHexString(b: number[]) {
+    return IDataStream.local.toHexString(b);
+  }
+
+  toHexString = (b: number[]): string => {
     let s: string[] = [];
     for (let i = 0; i < b.length; i++) {
       s.push(this.padString(this.toHexString2(b[i]), 2, '0', false) + ' ');
     }
     return s.toString();
-  }
+  };
 
   padString(t: string, n: number, c: string, right: boolean) {
     let len = new ILanguage({str: t}).length();

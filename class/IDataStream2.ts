@@ -1,14 +1,16 @@
 import {Component} from 'react';
-
+import Base64 from './binary/Base64';
 interface Props {}
 
 class IDataStream2 extends Component<Props> {
+  static local: IDataStream2;
   constructor(props: Props) {
     super(props);
     this.state = {};
+    IDataStream2.local = this;
   }
 
-  asciiHex(s: string): number[] {
+  static asciiHex(s: string): number[] {
     const ascii2Hex = (c1: any, c2: any): number => {
       let b1: number;
       if (c1 >= 'A' && c1 <= 'F') {
@@ -37,11 +39,16 @@ class IDataStream2 extends Component<Props> {
     return t;
   }
 
-  special_ascii6Bit_to_binary8Bit(s: number[]) {
-    Base64 base64Decoder = new Base64();
-    byte[] t = base64Decoder.decode(s);
+  static special_ascii6Bit_to_binary8Bit(s: number[]) {
+    return IDataStream2.local.special_ascii6Bit_to_binary8Bit(s);
+  }
+
+  special_ascii6Bit_to_binary8Bit = (s: number[]): number[] => {
+    const base64Decoder: Base64 = new Base64({});
+    //decode => decode_byte
+    const t: number[] = base64Decoder.decode_byte(s);
     return t;
-}
+  };
 }
 
 export default IDataStream2;

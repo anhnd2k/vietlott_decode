@@ -12,11 +12,13 @@ class TicketInfo extends Component<Props> {
   bcType: number = 0;
   invalid: boolean = false;
   tsn: TSN | undefined;
+  ticketInfoVersion: number = 0;
   constructor(props: Props) {
     super(props);
     this.state = {};
   }
   TicketInfoFun = (b: number[]) => {
+    let t: number[];
     if (b.length === 9) {
       try {
         const IN = new IDataInputByteArray({b});
@@ -32,11 +34,20 @@ class TicketInfo extends Component<Props> {
         this.invalid = true;
       }
     } else {
-        try {
-            const IN = new IDataInputByteArray(IDataStream2.spq)
-        } catch (error) {
-            
+      try {
+        const IN = new IDataInputByteArray({
+          b: IDataStream2.special_ascii6Bit_to_binary8Bit(b),
+        });
+        this.bcType = IN.readByteValue();
+        t = [0, 0, 0, 0, 0, 0, 0, 0]; //t = new byte[8];
+        IN.readBytesInt(t, 0, t.length);
+        this.tsn = new TSN({data: t, packed: true});
+        this.ticketInfoVersion = IN.readByteValue();
+        if (this.ticketInfoVersion !== 1) {
+          this.invalid = true;
         }
+        // this.date
+      } catch (error) {}
     }
   };
 }

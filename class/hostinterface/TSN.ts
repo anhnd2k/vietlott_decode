@@ -73,8 +73,7 @@ class TSN extends Component<Props> {
   }
 
   dumpTSN(tsn: number[]) {
-    const idataStream = new IDataStream({});
-    let t: string = idataStream.toHexString(tsn);
+    let t: string = IDataStream.toHexString(tsn);
     const s = [];
     s.push(t.substring(0, 2));
     s.push(t.substring(3, 5));

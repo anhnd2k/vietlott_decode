@@ -27,7 +27,9 @@ class IDataInputByteArray extends Component<Props> {
     // len: size read
     let count: number = 0;
     try {
-      for (let i = off; i < len; i++) {
+      //count = this.read(b, off, len);
+      const a = len + off;
+      for (let i = off; i < a; i++) {
         if (this.dataInput[i]) {
           count += 1;
         }
@@ -54,7 +56,9 @@ class IDataInputByteArray extends Component<Props> {
     let b: number = 0;
     try {
       b = this.dataInput[0];
-    } catch (error) {}
+    } catch (error) {
+      console.log('==>>>> err in line 57 file IDataInputByteArray.ts');
+    }
     return b;
   }
 }
