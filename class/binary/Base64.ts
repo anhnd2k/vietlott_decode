@@ -106,7 +106,7 @@ class Base64 extends Component<Props> {
     );
   }
 
-  decode_byte(pArray: number[]): number[] {
+  decode_byte(pArray: Uint8Array): Uint8Array {
     this.reset();
     if (pArray != null && pArray.length != 0) {
       // const len = (long)(pArray.length * 3 / 4);
@@ -147,7 +147,7 @@ class Base64 extends Component<Props> {
     }
   }
 
-  readResults(b: number[], bPos: number[], bAvail: number) {
+  readResults(b: number[], bPos: number, bAvail: number) {
     if (this.buffer != null) {
       const len: number = Math.min(this.avail(), bAvail);
       if (this.buffer !== b) {
@@ -193,7 +193,7 @@ class Base64 extends Component<Props> {
     this.eof = false;
   }
 
-  decode(_in: number[], _inPos: number, _inAvail: number) {
+  decode(_in: Uint8Array, _inPos: number, _inAvail: number) {
     if (!this.eof) {
       if (_inAvail < 0) {
         this.eof = true;

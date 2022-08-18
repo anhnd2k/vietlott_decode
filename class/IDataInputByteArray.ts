@@ -1,11 +1,11 @@
 import {Component} from 'react';
 
 interface Props {
-  b: number[];
+  b: Uint8Array;
 }
 
 class IDataInputByteArray extends Component<Props> {
-  dataInput: number[] = [];
+  dataInput: Uint8Array;
   constructor(props: Props) {
     super(props);
     this.dataInput = props.b;
@@ -57,9 +57,29 @@ class IDataInputByteArray extends Component<Props> {
     try {
       b = this.dataInput[0];
     } catch (error) {
-      console.log('==>>>> err in line 57 file IDataInputByteArray.ts');
+      console.log('==>>>> err in line 60 file IDataInputByteArray.ts');
     }
     return b;
+  }
+
+  readWord(): number {
+    let s: number = 0;
+    try {
+      // s = (short)(this.readByte() & 255);
+      // s += (short)(this.readByte() * 256 & '\uff00');
+      s = (<number>(this.dataInput[0] & 255)) | 0;
+      s += (<number>((this.dataInput[0] * 256) & '\uff00'.charCodeAt(0))) | 0;
+    } catch (error) {
+      console.log('==>>>> err in line 73 file IDataInputByteArray.ts');
+    }
+
+    return s;
+  }
+
+  readLongWord() {
+    let i: number = this.readWord() & '\uffff'.charCodeAt(0);
+    i += this.readWord() << 16;
+    return i;
   }
 }
 

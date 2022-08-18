@@ -1,11 +1,12 @@
 import {Component} from 'react';
 import * as encoding from 'text-encoding';
 import IDataStream2 from './IDataStream2';
+import TicketInfo from './TicketInfo';
 
 interface Props {}
 
 class ValidateTicketInfo extends Component<Props> {
-  encodedData = new Uint8Array();
+  encodedData: Uint8Array = new Uint8Array();
   constructor(props: Props) {
     super(props);
     const value = 'AgqETWoiweYCASohMxUIEggAGAAAACshAQZkCICAFAQABBAAAA==';
@@ -32,6 +33,16 @@ class ValidateTicketInfo extends Component<Props> {
         // ValidateTicketInfo.this.displayedTicketData = ticketInfox.toDisplay();
       } else if (this.encodedData[0] === 65) {
         // to do
+        const ticketInfo: TicketInfo = new TicketInfo({b: this.encodedData});
+        // ValidateTicketInfo.this.ticketDataPanel.remove(
+        //   ValidateTicketInfo.this.displayedTicketData,
+        // );
+        if (ticketInfo.invalid) {
+          console.log('Mã vạch không hợp lệ');
+        } else {
+          // ValidateTicketInfo.this.displayedTicketData = ticketInfo.toDisplay();
+          
+        }
       } else if (this.encodedData[0] === 97) {
         console.log(
           'Mã vạch không hợp lệ, vui lòng kiểm tra phím CapsLock và quét lại vé',

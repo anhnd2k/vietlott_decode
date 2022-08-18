@@ -39,14 +39,14 @@ class IDataStream2 extends Component<Props> {
     return t;
   }
 
-  static special_ascii6Bit_to_binary8Bit(s: number[]) {
+  static special_ascii6Bit_to_binary8Bit(s: Uint8Array) {
     return IDataStream2.local.special_ascii6Bit_to_binary8Bit(s);
   }
 
-  special_ascii6Bit_to_binary8Bit = (s: number[]): number[] => {
+  special_ascii6Bit_to_binary8Bit = (s: Uint8Array): Uint8Array => {
     const base64Decoder: Base64 = new Base64({});
     //decode => decode_byte
-    const t: number[] = base64Decoder.decode_byte(s);
+    const t: Uint8Array = base64Decoder.decode_byte(s);
     return t;
   };
 }
