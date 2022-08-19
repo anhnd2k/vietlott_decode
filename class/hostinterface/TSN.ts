@@ -1,5 +1,6 @@
 import {Component} from 'react';
 import IDataStream from '../stdData/IDataStream';
+import {intToByte} from '../modal';
 
 interface Props {
   data?: number[];
@@ -13,10 +14,14 @@ class TSN extends Component<Props> {
   length: number = 0;
   constructor(props: Props) {
     super(props);
-    if (props.data) {
+    if (props.data && props.packed === undefined) {
       this.data = props.data;
       this.setLength(props.data.length);
-    } else if (props.text) {
+    } else if (
+      props.text &&
+      props.data === undefined &&
+      props.packed === undefined
+    ) {
       this.data = props.text.split('').map(function (s) {
         return s.charCodeAt(0);
       });
@@ -35,6 +40,7 @@ class TSN extends Component<Props> {
       } else {
         this.data = props.data;
       }
+      this.setLength(this.data.length);
     } else {
       this.data = new Array<number>(8);
       this.setLength(0);
@@ -65,9 +71,9 @@ class TSN extends Component<Props> {
     let i = 0;
     for (let j = 0; i < length; j++) {
       // eslint-disable-next-line no-bitwise
-      this.data[i++] = (packedData[j] >> 4) & 15;
+      this.data[i++] = intToByte((packedData[j] >> 4) & 15);
       // eslint-disable-next-line no-bitwise
-      this.data[i] = packedData[j] & 15;
+      this.data[i] = intToByte(packedData[j] & 15);
       ++i;
     }
   }

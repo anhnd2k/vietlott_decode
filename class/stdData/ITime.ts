@@ -7,17 +7,17 @@ interface Props {
 
 class ITime extends Component<Props> {
   static local: ITime;
-  private COLON: string = ':';
-  private hours: number = 0;
-  private minutes: number = 0;
-  private seconds: number = 0;
+  COLON: string = ':';
+  hours: number = 0;
+  minutes: number = 0;
+  seconds: number = 0;
   constructor(props: Props) {
     super(props);
     ITime.local = this;
     const {time} = props;
     if (time) {
-      this.hours = time / 100;
-      this.minutes = time % 100;
+      this.hours = Math.round(time / 100);
+      this.minutes = Math.round(time % 100);
       this.seconds = 0;
     } else {
       const time: Date = new Date();

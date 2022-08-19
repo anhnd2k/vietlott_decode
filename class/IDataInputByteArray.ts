@@ -1,14 +1,16 @@
 import {Component} from 'react';
-
+import {intToByte, toShort} from './modal';
 interface Props {
   b: Uint8Array;
 }
 
 class IDataInputByteArray extends Component<Props> {
   dataInput: Uint8Array;
+  countReadNumber: number;
   constructor(props: Props) {
     super(props);
     this.dataInput = props.b;
+    this.countReadNumber = 0;
     this.state = {};
   }
 
@@ -22,22 +24,30 @@ class IDataInputByteArray extends Component<Props> {
     return size;
   }
 
-  readBytesInt(b: number[], off: number, len: number): number {
+  readBytesInt(
+    b: number[],
+    off: number,
+    len: number,
+  ): {count: number; newArr: number[]} {
     // off: read from
     // len: size read
     let count: number = 0;
+    const newArr: number[] = [];
     try {
       //count = this.read(b, off, len);
-      const a = len + off;
-      for (let i = off; i < a; i++) {
-        if (this.dataInput[i]) {
-          count += 1;
-        }
+      const a = len + off + this.countReadNumber;
+      for (let i = off + this.countReadNumber; i < a; i++) {
+        // if (this.dataInput[i]) {
+        const ahihi = intToByte(this.dataInput[i]);
+        newArr.push(ahihi);
+        count += 1;
+        // }
       }
+      this.countReadNumber += len;
     } catch {
       console.log('===>>> readBytes err IDataInputByteArray');
     }
-    return count;
+    return {count, newArr};
   }
 
   readBytesString(count: number): string {
@@ -55,10 +65,11 @@ class IDataInputByteArray extends Component<Props> {
   readByteValue(): number {
     let b: number = 0;
     try {
-      b = this.dataInput[0];
+      b = this.dataInput[this.countReadNumber];
     } catch (error) {
       console.log('==>>>> err in line 60 file IDataInputByteArray.ts');
     }
+    this.countReadNumber += 1;
     return b;
   }
 
@@ -67,8 +78,10 @@ class IDataInputByteArray extends Component<Props> {
     try {
       // s = (short)(this.readByte() & 255);
       // s += (short)(this.readByte() * 256 & '\uff00');
-      s = (<number>(this.dataInput[0] & 255)) | 0;
-      s += (<number>((this.dataInput[0] * 256) & '\uff00'.charCodeAt(0))) | 0;
+      s = toShort((<number>(this.readByteValue() & 255)) | 0);
+      s += toShort(
+        (<number>((this.readByteValue() * 256) & '\uff00'.charCodeAt(0))) | 0,
+      );
     } catch (error) {
       console.log('==>>>> err in line 73 file IDataInputByteArray.ts');
     }
@@ -84,3 +97,4 @@ class IDataInputByteArray extends Component<Props> {
 }
 
 export default IDataInputByteArray;
+/* Reading the bytes from the input stream and converting them to an integer. */

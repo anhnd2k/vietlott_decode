@@ -14,6 +14,7 @@ class ValidateTicketInfo extends Component<Props> {
     const endcoder = new encoding.TextEncoder();
     this.encodedData = endcoder.encode(value);
     this.state = {};
+    console.log('===>>>> encodedData', this.encodedData);
   }
 
   displayBetDetails() {
@@ -23,12 +24,13 @@ class ValidateTicketInfo extends Component<Props> {
         let t: number[] = IDataStream2.asciiHex(
           this.encodedData.toString().substring(1, 17),
         );
-        const bcDatax: number[] = [];
+        // const bcDatax: number[] = new Array<number>(9);
+        const bcDatax: Uint8Array = new Uint8Array(9);
         bcDatax[0] = 1;
         for (let i = 1; i < 9; i++) {
           bcDatax[i] = t[i - 1];
         }
-        // TicketInfo ticketInfox = new TicketInfo(bcDatax);
+        const ticketInfo: TicketInfo = new TicketInfo({b: bcDatax});
         // ValidateTicketInfo.this.ticketDataPanel.remove(ValidateTicketInfo.this.displayedTicketData);
         // ValidateTicketInfo.this.displayedTicketData = ticketInfox.toDisplay();
       } else if (this.encodedData[0] === 65) {
@@ -41,7 +43,6 @@ class ValidateTicketInfo extends Component<Props> {
           console.log('Mã vạch không hợp lệ');
         } else {
           // ValidateTicketInfo.this.displayedTicketData = ticketInfo.toDisplay();
-          
         }
       } else if (this.encodedData[0] === 97) {
         console.log(

@@ -19,7 +19,7 @@ class IDate extends Component<Props> {
       const {date} = props;
       const day: number = date & 31;
       const month: number = (date >> 5) & 15;
-      let year: number = date >> 9 && 127;
+      let year: number = (date >> 9) & 127;
       if (year > 80) {
         year += 1900;
       } else {

@@ -1,5 +1,6 @@
 import {Component} from 'react';
 import StringUtils from './StringUtils';
+import {intToByte} from '../modal';
 
 interface Props {
   urlSafe?: boolean;
@@ -108,7 +109,7 @@ class Base64 extends Component<Props> {
 
   decode_byte(pArray: Uint8Array): Uint8Array {
     this.reset();
-    if (pArray != null && pArray.length != 0) {
+    if (pArray != null && pArray.length !== 0) {
       // const len = (long)(pArray.length * 3 / 4);
       const len: number = (n => (n < 0 ? Math.ceil(n) : Math.floor(n)))(
         <number>(((pArray.length * 3) / 4) | 0),
@@ -133,6 +134,7 @@ class Base64 extends Component<Props> {
         return a;
       })(this.pos);
       this.readResults(result, 0, result.length);
+      console.log('===>>> result', result);
       return result;
     } else {
       return pArray;
@@ -208,7 +210,7 @@ class Base64 extends Component<Props> {
         }
 
         const b: number = _in[_inPos++];
-        if (b == 61) {
+        if (b === 61) {
           this.eof = true;
           break;
         }
@@ -218,25 +220,29 @@ class Base64 extends Component<Props> {
           if (result >= 0) {
             this.modulus = ++this.modulus % 4;
             this.x = (this.x << 6) + result;
-            if (this.modulus == 0) {
-              this.buffer[this.pos++] = ((this.x >> 16) & 255) | 0;
-              this.buffer[this.pos++] = ((this.x >> 8) & 255) | 0;
-              this.buffer[this.pos++] = (this.x & 255) | 0;
+            if (this.modulus === 0) {
+              this.buffer[this.pos++] = intToByte(
+                (<number>((this.x >> 16) & 255)) | 0,
+              );
+              this.buffer[this.pos++] = intToByte(
+                (<number>((this.x >> 8) & 255)) | 0,
+              );
+              this.buffer[this.pos++] = intToByte((<number>(this.x & 255)) | 0);
             }
           }
         }
       }
 
-      if (this.eof && this.modulus != 0) {
+      if (this.eof && this.modulus !== 0) {
         this.x <<= 6;
         switch (this.modulus) {
           case 2:
             this.x <<= 6;
-            this.buffer[this.pos++] = ((this.x >> 16) & 255) | 0;
+            this.buffer[this.pos++] = intToByte(((this.x >> 16) & 255) | 0);
             break;
           case 3:
-            this.buffer[this.pos++] = ((this.x >> 16) & 255) | 0;
-            this.buffer[this.pos++] = ((this.x >> 8) & 255) | 0;
+            this.buffer[this.pos++] = intToByte(((this.x >> 16) & 255) | 0);
+            this.buffer[this.pos++] = intToByte(((this.x >> 8) & 255) | 0);
         }
       }
     }

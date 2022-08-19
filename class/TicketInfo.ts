@@ -4,6 +4,7 @@ import IDataInputByteArray from './IDataInputByteArray';
 import IDataStream2 from './IDataStream2';
 import IDate from './stdData/IDate';
 import ITime from './stdData/ITime';
+import {intToByte, toShort} from './modal';
 
 interface Props {
   tsn?: TSN;
@@ -94,20 +95,23 @@ class TicketInfo extends Component<Props> {
           if (this.bcType !== 1) {
             this.invalid = true;
           }
-          const t = new Array(8);
-          IN.readBytesInt(t, 0, t.length);
+          t = [0, 0, 0, 0, 0, 0, 0, 0]; //t = new byte[8];
+          //IN.readBytesInt(t, 0, t.length)
+          t = IN.readBytesInt(t, 0, t.length).newArr;
           this.tsn = new TSN({data: t, packed: true});
         } catch (error) {
           this.invalid = true;
         }
       } else {
         try {
+          const b1 = new IDataStream2({}).special_ascii6Bit_to_binary8Bit(b);
           const IN = new IDataInputByteArray({
-            b: IDataStream2.special_ascii6Bit_to_binary8Bit(b),
+            b: b1,
           });
           this.bcType = IN.readByteValue();
           t = [0, 0, 0, 0, 0, 0, 0, 0]; //t = new byte[8];
-          IN.readBytesInt(t, 0, t.length);
+          //IN.readBytesInt(t, 0, t.length)
+          t = IN.readBytesInt(t, 0, t.length).newArr;
           this.tsn = new TSN({data: t, packed: true});
           this.ticketInfoVersion = IN.readByteValue();
           if (this.ticketInfoVersion !== 1) {
@@ -116,19 +120,23 @@ class TicketInfo extends Component<Props> {
           this.date = new IDate({date: IN.readWord()});
           const temp1: number = IN.readWord();
           this.time = new ITime({time: temp1 & 4095});
-          this.validPanels = (<number>((temp1 >> 12) & 15)) | 0;
+          this.validPanels = intToByte((<number>((temp1 >> 12) & 15)) | 0);
+          console.log('==>> validPanels', this.validPanels);
+
           this.hwid = IN.readWord();
           this.gameBitmap = IN.readWord();
           this.drawID = IN.readLongWord();
           this.drawDate = new IDate({date: IN.readWord()});
           this.drawByteValue = IN.readByteValue();
           const temp: number = IN.readByteValue();
-          this.picksPerPanel = (<number>(temp & 127)) | 0;
+          this.picksPerPanel = intToByte((<number>(temp & 127)) | 0);
           this.permutation = false;
-          if ((temp & 128) != 0) {
+          if ((temp & 128) !== 0) {
             this.permutation = true;
           }
-          this.unitBetCost = (<number>(IN.readByteValue() * 100)) | 0;
+          this.unitBetCost = toShort((<number>(IN.readByteValue() * 100)) | 0);
+          console.log('==>> unitBetCost', this.unitBetCost);
+
           this.valueSize = IN.readByteValue();
           this.format = 0;
           if (this.gameBitmap === 8 || this.gameBitmap === 32) {
@@ -145,10 +153,13 @@ class TicketInfo extends Component<Props> {
           // this.ticketInfoPanels = new Vector();
           this.ticketInfoPanels = <any>[];
 
+          console.log('==>> validPanels', this.validPanels);
+          console.log('==>> valueSize', this.valueSize);
+
           for (let i: number = 0; i < this.validPanels; i++) {
             const pickType: number = IN.readByteValue();
-            const s: number[] = new Array(this.valueSize);
-            IN.readBytesInt(s, 0, this.valueSize);
+            let s: number[] = new Array(this.valueSize);
+            s = IN.readBytesInt(s, 0, this.valueSize).newArr;
             // TicketInfoDetails d = new TicketInfoDetails(i, this.unitBetCost, pickType, this.picksPerPanel, this.format, s);
             // this.ticketInfoPanels.add(d);
           }
