@@ -9,7 +9,7 @@ class ValidateTicketInfo extends Component<Props> {
   encodedData: Uint8Array = new Uint8Array();
   constructor(props: Props) {
     super(props);
-    const value = 'AgqETWoiweYCASohMxUIEggAGAAAACshAQZkCICAFAQABBAAAA==';
+    const value = 'AgNCM4UOkrgDAYUpSRXnIQgAogIAAIYpAQ5kCCCGQ2AgDQoAAA==';
     // eslint-disable-next-line no-undef
     const endcoder = new encoding.TextEncoder();
     this.encodedData = endcoder.encode(value);
@@ -31,6 +31,7 @@ class ValidateTicketInfo extends Component<Props> {
           bcDatax[i] = t[i - 1];
         }
         const ticketInfo: TicketInfo = new TicketInfo({b: bcDatax});
+        ticketInfo.toDisplay();
         // ValidateTicketInfo.this.ticketDataPanel.remove(ValidateTicketInfo.this.displayedTicketData);
         // ValidateTicketInfo.this.displayedTicketData = ticketInfox.toDisplay();
       } else if (this.encodedData[0] === 65) {
@@ -42,6 +43,7 @@ class ValidateTicketInfo extends Component<Props> {
         if (ticketInfo.invalid) {
           console.log('Mã vạch không hợp lệ');
         } else {
+          ticketInfo.toDisplay();
           // ValidateTicketInfo.this.displayedTicketData = ticketInfo.toDisplay();
         }
       } else if (this.encodedData[0] === 97) {

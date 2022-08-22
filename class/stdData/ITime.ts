@@ -16,8 +16,10 @@ class ITime extends Component<Props> {
     ITime.local = this;
     const {time} = props;
     if (time) {
-      this.hours = Math.round(time / 100);
-      this.minutes = Math.round(time % 100);
+      // this.hours = Math.round(time / 100);
+      this.hours = Math.floor(time / 100);
+      // this.minutes = Math.round(time % 100); Math.floor
+      this.minutes = Math.floor(time % 100);
       this.seconds = 0;
     } else {
       const time: Date = new Date();
@@ -97,18 +99,16 @@ class ITime extends Component<Props> {
   }
 
   toString(showSeconds: boolean) {
-    const df = (
-      data: string | number | Date | dayjs.Dayjs | null | undefined,
-    ) => {
-      return dayjs(data).format('00');
-    };
+    const _hours = this.hours;
+    const _minutes = this.minutes;
+    const _seconds = this.seconds;
+    // const df = (
+    //   data: string | number | Date | dayjs.Dayjs | null | undefined,
+    // ) => {
+    //   return dayjs(data).format('MM:SS');
+    // };
 
-    return (
-      df(this.hours) +
-      ':' +
-      df(this.minutes) +
-      (showSeconds ? ':' + df(this.seconds) : '')
-    );
+    return _hours + ':' + _minutes + (showSeconds ? ':' + _seconds : '');
   }
 
   toStringRaw(): string {

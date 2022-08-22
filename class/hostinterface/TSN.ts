@@ -10,7 +10,7 @@ interface Props {
 
 class TSN extends Component<Props> {
   LENGTH = 16;
-  data = new Array();
+  data = new Array<number>();
   length: number = 0;
   constructor(props: Props) {
     super(props);
@@ -48,6 +48,10 @@ class TSN extends Component<Props> {
     this.state = {};
   }
 
+  getData(): number[] {
+    return this.data;
+  }
+
   setLength(len: number) {
     this.length = len;
   }
@@ -67,7 +71,7 @@ class TSN extends Component<Props> {
 
   unpackTSN(packedData: number[]) {
     const length = packedData.length * 2;
-    this.data = new Array<Number>(length);
+    this.data = new Array<number>(length);
     let i = 0;
     for (let j = 0; i < length; j++) {
       // eslint-disable-next-line no-bitwise

@@ -67,7 +67,7 @@ class IDataInputByteArray extends Component<Props> {
     try {
       b = this.dataInput[this.countReadNumber];
     } catch (error) {
-      console.log('==>>>> err in line 60 file IDataInputByteArray.ts');
+      console.log('==>>>> err in line 70 file IDataInputByteArray.ts');
     }
     this.countReadNumber += 1;
     return b;

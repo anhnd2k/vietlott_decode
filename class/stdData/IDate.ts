@@ -81,9 +81,11 @@ class IDate extends Component<Props> {
   }
 
   toString(showYear: boolean): string {
+    const timeGet = this.value.getTime();
+    const myDate = new Date(timeGet).toISOString();
     const dateFormat = showYear
-      ? dayjs(this.value.getTime()).format('dd/MM/yy')
-      : dayjs(this.value.getTime()).format('dd-MMM');
+      ? dayjs(myDate).format('DD/MM/YY')
+      : dayjs(myDate).format('DD-MMM');
     return dateFormat;
   }
 
