@@ -157,6 +157,7 @@ class TicketInfo extends Component<Props> {
 
           console.log('==>> validPanels', this.validPanels);
           console.log('==>> valueSize', this.valueSize);
+          console.log('==>> format', this.format);
 
           for (let i: number = 0; i < this.validPanels; i++) {
             const pickType: number = IN.readByteValue();
@@ -182,6 +183,10 @@ class TicketInfo extends Component<Props> {
 
   // gom và hiển thị dữ liệu
   toDisplay() {
+    //Game Name
+    const gameName = this.lookupGameName(this.gameBitmap);
+    console.log('==>>>> Game Name', gameName);
+    // TSN
     const tsn_getdata = this.tsn.getData();
     const showTSN_value = IDataStream.toDelimitedHexString(tsn_getdata, 4, '-'); //0A84-4D6A-22C1-E602 - string
     console.log('==>>>> showTSN_value', showTSN_value);
@@ -243,6 +248,30 @@ class TicketInfo extends Component<Props> {
         // panels.add(d.toDisplay());
       }
     }
+  }
+
+  lookupGameName(gameBitmap: number): string {
+    let s = '';
+    switch (gameBitmap) {
+      case 4:
+        s = 'KENO';
+        break;
+      case 8:
+        s = '6/45';
+        break;
+      case 32:
+        s = '6/55';
+        break;
+      case 512:
+        s = '3D';
+        break;
+      case 1024:
+        s = '4D';
+        break;
+      case 2048:
+        s = '3D PRO';
+    }
+    return s;
   }
 }
 

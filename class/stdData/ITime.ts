@@ -107,7 +107,6 @@ class ITime extends Component<Props> {
     // ) => {
     //   return dayjs(data).format('MM:SS');
     // };
-
     return _hours + ':' + _minutes + (showSeconds ? ':' + _seconds : '');
   }
 

@@ -1,11 +1,11 @@
 import {Component} from 'react';
 import {intToByte, toShort} from './modal';
 interface Props {
-  b: Uint8Array;
+  b: Uint8Array | number[];
 }
 
 class IDataInputByteArray extends Component<Props> {
-  dataInput: Uint8Array;
+  dataInput: Uint8Array | number[];
   countReadNumber: number;
   constructor(props: Props) {
     super(props);

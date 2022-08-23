@@ -47,8 +47,10 @@ class IAmount extends Component<Props> {
   }
 
   toString(): string {
-    // return this.toString(false, true, true);
-    return '';
+    const newFormatVND = (x: number): string => {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    };
+    return newFormatVND(this.value);
   }
 
   //   toStringFunc(showSymbol: boolean, showCents: boolean, showCommas: boolean): string {

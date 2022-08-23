@@ -9,7 +9,8 @@ class ValidateTicketInfo extends Component<Props> {
   encodedData: Uint8Array = new Uint8Array();
   constructor(props: Props) {
     super(props);
-    const value = 'AgNCM4UOkrgDAYUpSRXnIQgAogIAAIYpAQ5kCCCGQ2AgDQoAAA==';
+    const value =
+      'AoLI+Bk4J1CgARgnCid0IAQAqAAAABgnAQpkDYCAAJAAAgCAEIogAAMKgAABQgAIAwgACEQAAwo=';
     // eslint-disable-next-line no-undef
     const endcoder = new encoding.TextEncoder();
     this.encodedData = endcoder.encode(value);

@@ -81,24 +81,24 @@ class IDate extends Component<Props> {
   }
 
   toString(showYear: boolean): string {
-    const timeGet = this.value.getTime();
-    const myDate = new Date(timeGet).toISOString();
+    // const timeGet = this.value.getTime();
+    // const myDate = new Date(timeGet).toISOString();
     const dateFormat = showYear
-      ? dayjs(myDate).format('DD/MM/YY')
-      : dayjs(myDate).format('DD-MMM');
+      ? dayjs(this.value.getTime()).format('DD/MM/YY')
+      : dayjs(this.value.getTime()).format('DD-MMM');
     return dateFormat;
   }
 
   toStringYear(): string {
-    return dayjs(this.value.getTime()).format('yy');
+    return dayjs(this.value.getTime()).format('YY');
   }
 
   toStringRaw(): string {
-    return dayjs(this.value.getTime()).format('yyMMdd');
+    return dayjs(this.value.getTime()).format('YYMMDD');
   }
 
   toStringFormat(): string {
-    return dayjs(this.value.getTime()).format('dd/MM/yy');
+    return dayjs(this.value.getTime()).format('DD/MM/YY');
   }
 }
 
