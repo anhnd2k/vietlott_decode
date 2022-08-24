@@ -123,8 +123,6 @@ class TicketInfo extends Component<Props> {
           const temp1: number = IN.readWord();
           this.time = new ITime({time: temp1 & 4095});
           this.validPanels = intToByte((<number>((temp1 >> 12) & 15)) | 0);
-          console.log('==>> validPanels', this.validPanels);
-
           this.hwid = IN.readWord();
           this.gameBitmap = IN.readWord();
           this.drawID = IN.readLongWord();
@@ -137,8 +135,6 @@ class TicketInfo extends Component<Props> {
             this.permutation = true;
           }
           this.unitBetCost = toShort((<number>(IN.readByteValue() * 100)) | 0);
-          console.log('==>> unitBetCost', this.unitBetCost);
-
           this.valueSize = IN.readByteValue();
           this.format = 0;
           if (this.gameBitmap === 8 || this.gameBitmap === 32) {
@@ -152,13 +148,7 @@ class TicketInfo extends Component<Props> {
           } else if (this.gameBitmap === 2048) {
             this.format = 6;
           }
-          // this.ticketInfoPanels = new Vector();
           this.ticketInfoPanels = <any>[];
-
-          console.log('==>> validPanels', this.validPanels);
-          console.log('==>> valueSize', this.valueSize);
-          console.log('==>> format', this.format);
-
           for (let i: number = 0; i < this.validPanels; i++) {
             const pickType: number = IN.readByteValue();
             let s: number[] = new Array(this.valueSize);
@@ -189,20 +179,20 @@ class TicketInfo extends Component<Props> {
     // TSN
     const tsn_getdata = this.tsn.getData();
     const showTSN_value = IDataStream.toDelimitedHexString(tsn_getdata, 4, '-'); //0A84-4D6A-22C1-E602 - string
-    console.log('==>>>> showTSN_value', showTSN_value);
+    console.log('==>>>> TSN', showTSN_value);
     if (this.tsnOnly) {
       console.log('==>> return when tsnOnly false');
       return;
     } else {
       // Ngày
       const Date_value = this.date.toString(true); //10/09/16
-      console.log('==>>>> Date_value', Date_value);
+      console.log('==>>>> NGAY', Date_value);
       // Giờ
       const time_value = this.time.toString(false); //13:31
-      console.log('==>>>> time_value', time_value);
+      console.log('==>>>> GIO', time_value);
       //HWID
       const HWID_value = IDataStream.toHexString_TypeInputNumber(this.hwid); // 4616
-      console.log('==>>>> HWID_value', HWID_value);
+      console.log('==>>>> HWID', HWID_value);
       // Mã kỳ QSMT
       let drawID_value: string = ''; // 24/16
       if (this.gameBitmap === 4) {
@@ -226,10 +216,10 @@ class TicketInfo extends Component<Props> {
             false,
           );
       }
-      console.log('==>>>> drawID_value', drawID_value);
+      console.log('==>>>> Mã Kỳ QSMT', drawID_value);
       // Ngày QSMT
       const drawDate_value = this.drawDate.toString(true); //11/09/16
-      console.log('==>>>> drawDate_value', drawDate_value);
+      console.log('==>>>> Ngày QSMT', drawDate_value);
       // Enumeration e = this.ticketInfoPanels.elements();
       const e: any = /* elements */ (a => {
         var i = 0;
@@ -242,11 +232,25 @@ class TicketInfo extends Component<Props> {
           },
         };
       })(this.ticketInfoPanels);
+      const dataDetails = [];
       while (e.hasMoreElements()) {
         const d: TicketInfoDetails = e.nextElement();
-        d.toDisplay();
+        const data = d.toDisplay();
+        dataDetails.push(data);
         // panels.add(d.toDisplay());
       }
+      //result
+      const result = {
+        gameName,
+        tsn_value: showTSN_value,
+        date_value: Date_value,
+        time_value: time_value,
+        HWID_value,
+        drawID_value,
+        drawDate_value,
+        dataDetails,
+      };
+      return result;
     }
   }
 
